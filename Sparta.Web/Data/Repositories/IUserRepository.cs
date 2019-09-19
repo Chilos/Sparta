@@ -1,6 +1,11 @@
-﻿namespace Sparta.Web.Data.Repositories
+﻿using Sparta.Web.Data.Abstract;
+using Sparta.Web.Model;
+
+namespace Sparta.Web.Data.Repositories
 {
-    internal interface IUserRepository
+    public interface IUserRepository : IEntityBaseRepository<User>
     {
+        bool IsEmailUniq(string email);
+        bool IsUsernameUniq(string username);
     }
 }

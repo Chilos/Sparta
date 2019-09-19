@@ -13,7 +13,7 @@ namespace Sparta.Web.Data.Repositories
     public class EntityBaseRepository<T> : IEntityBaseRepository<T>
          where T : class, IEntityBase, new()
     {
-        private SpartaContext _context;
+        private readonly SpartaContext _context;
 
         public EntityBaseRepository(SpartaContext context)
         {
