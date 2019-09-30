@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Sparta.Web.API.ViewModel;
+﻿using Sparta.Web.API.ViewModel;
 
 namespace Sparta.Web.API.Services
 {

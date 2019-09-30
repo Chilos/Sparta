@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using CryptoHelper;
 using Microsoft.IdentityModel.Tokens;
 using Sparta.Web.API.ViewModel;
 
 namespace Sparta.Web.API.Services
 {
-
-
     public class AuthService : IAuthService
     {
         private readonly string _jwtSecret;
@@ -23,6 +18,7 @@ namespace Sparta.Web.API.Services
             this._jwtSecret = jwtSecret;
             this._jwtLifespan = jwtLifespan;
         }
+
         public AuthData GetAuthData(string id)
         {
             var expirationTime = DateTime.UtcNow.AddSeconds(_jwtLifespan);
@@ -31,7 +27,9 @@ namespace Sparta.Web.API.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, id)
+                    new Claim(ClaimTypes.Name, id),
+                    new Claim(ClaimTypes.Role, "admin"), 
+
                 }),
                 Expires = expirationTime,
                 // new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature)
@@ -46,7 +44,7 @@ namespace Sparta.Web.API.Services
             return new AuthData
             {
                 Token = token,
-                TokenExpirationTime = ((DateTimeOffset)expirationTime).ToUnixTimeSeconds(),
+                TokenExpirationTime = ((DateTimeOffset) expirationTime).ToUnixTimeSeconds(),
                 Id = id
             };
         }

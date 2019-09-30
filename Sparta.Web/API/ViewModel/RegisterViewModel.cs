@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sparta.Web.API.ViewModel
 {
@@ -12,9 +9,7 @@ namespace Sparta.Web.API.ViewModel
         [StringLength(60, MinimumLength = 2)]
         public string Username { get; set; }
 
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public int PhoneNumber { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 3)]

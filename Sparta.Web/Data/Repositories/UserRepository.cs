@@ -1,8 +1,4 @@
 ﻿using Sparta.Web.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sparta.Web.Data.Repositories
 {
@@ -12,9 +8,9 @@ namespace Sparta.Web.Data.Repositories
     {
         public UserRepository(SpartaContext context) : base(context) { }
 
-        public bool IsEmailUniq(string email)
+        public bool IsPhoneNumberUniq(int phoneNumber)
         {
-            var user = this.GetSingle(u => u.Email == email);
+            var user = this.GetSingle(u => u.PhoneNumber == phoneNumber);
             return user == null;
         }
 

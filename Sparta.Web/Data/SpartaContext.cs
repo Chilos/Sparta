@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sparta.Web.Model;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sparta.Web.Data
 {
@@ -31,10 +28,6 @@ namespace Sparta.Web.Data
                 .HasMaxLength(60)
                 .IsRequired();
 
-            modelBuilder.Entity<User>()
-                .Property(user => user.Email)
-                .HasMaxLength(60)
-                .IsRequired();
         }
     }
 }

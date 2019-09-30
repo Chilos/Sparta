@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sparta.Web.API.Services;
 using Sparta.Web.API.ViewModel;
@@ -14,7 +11,7 @@ namespace Sparta.Web.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthService _authService;
+        private readonly IAuthService _authService;
         private readonly IUserRepository _userRepository;
 
         public AuthController(IUserRepository userRepository, IAuthService authService)
@@ -28,9 +25,9 @@ namespace Sparta.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var user = _userRepository.GetSingle(u => u.Email == model.Email);
+            var user = _userRepository.GetSingle(u => u.Username == model.Username);
             if (user == null)
-                return BadRequest(new {email = "no user with this email"});
+                return BadRequest(new {username = "no user with this name"});
 
             var passwordValid = _authService.VerifyPassword(model.Password, user.Password);
             if (!passwordValid)
@@ -44,7 +41,7 @@ namespace Sparta.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var emailUniq = _userRepository.IsEmailUniq(model.Email);
+            var emailUniq = _userRepository.IsPhoneNumberUniq(model.PhoneNumber);
             if (!emailUniq)
                 return BadRequest(new {email = "user with this email already exists"});
             var usernameUniq = _userRepository.IsUsernameUniq(model.Username);
@@ -55,7 +52,7 @@ namespace Sparta.Web.Controllers
             {
                 Id = id,
                 Username = model.Username,
-                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
                 Password = _authService.HashPassword(model.Password)
             };
             _userRepository.Add(user);
