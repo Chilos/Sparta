@@ -19,7 +19,7 @@ namespace Sparta.Web.API.Services
             this._jwtLifespan = jwtLifespan;
         }
 
-        public AuthData GetAuthData(string id)
+        public AuthData GetAuthData(string id, string role)
         {
             var expirationTime = DateTime.UtcNow.AddSeconds(_jwtLifespan);
 
@@ -28,7 +28,7 @@ namespace Sparta.Web.API.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, id),
-                    new Claim(ClaimTypes.Role, "admin"), 
+                    new Claim(ClaimTypes.Role, role), 
 
                 }),
                 Expires = expirationTime,
@@ -45,6 +45,7 @@ namespace Sparta.Web.API.Services
             {
                 Token = token,
                 TokenExpirationTime = ((DateTimeOffset) expirationTime).ToUnixTimeSeconds(),
+                Role = role,
                 Id = id
             };
         }

@@ -11,6 +11,8 @@ namespace Sparta.Web.API.ViewModel
 
         public int PhoneNumber { get; set; }
 
+        public string Role { get; set; }
+
         [Required]
         [StringLength(60, MinimumLength = 3)]
         public string Password { get; set; }

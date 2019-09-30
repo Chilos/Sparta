@@ -33,7 +33,7 @@ namespace Sparta.Web.Controllers
             if (!passwordValid)
                 return BadRequest(new {password = "invalid password"});
 
-            return _authService.GetAuthData(user.Id);
+            return _authService.GetAuthData(user.Id, user.Role);
         }
 
         [HttpPost("register")]
@@ -41,8 +41,8 @@ namespace Sparta.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var emailUniq = _userRepository.IsPhoneNumberUniq(model.PhoneNumber);
-            if (!emailUniq)
+            var phoneUniq = _userRepository.IsPhoneNumberUniq(model.PhoneNumber);
+            if (!phoneUniq)
                 return BadRequest(new {email = "user with this email already exists"});
             var usernameUniq = _userRepository.IsUsernameUniq(model.Username);
             if (!usernameUniq)
@@ -53,12 +53,13 @@ namespace Sparta.Web.Controllers
                 Id = id,
                 Username = model.Username,
                 PhoneNumber = model.PhoneNumber,
-                Password = _authService.HashPassword(model.Password)
+                Password = _authService.HashPassword(model.Password),
+                Role = model.Role
             };
             _userRepository.Add(user);
             _userRepository.Commit();
 
-            return _authService.GetAuthData(id);
+            return _authService.GetAuthData(id, user.Role);
         }
     }
 }

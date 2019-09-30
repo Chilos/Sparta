@@ -4,7 +4,7 @@ namespace Sparta.Web.API.Services
 {
     public interface IAuthService
     {
-        AuthData GetAuthData(string id);
+        AuthData GetAuthData(string id, string role);
         string HashPassword(string password);
         bool VerifyPassword(string actualPassword, string hashedPassword);
     }
