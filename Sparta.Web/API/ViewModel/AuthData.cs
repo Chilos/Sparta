@@ -6,5 +6,6 @@
         public string Role { get; set; }
         public long TokenExpirationTime { get; set; }
         public string Id { get; set; }
+        public string Username { get; set; }
     }
 }

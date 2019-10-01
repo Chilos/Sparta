@@ -33,7 +33,7 @@ namespace Sparta.Web.Controllers
             if (!passwordValid)
                 return BadRequest(new {password = "invalid password"});
 
-            return _authService.GetAuthData(user.Id, user.Role);
+            return _authService.GetAuthData(user.Id, user.Role, user.Username);
         }
 
         [HttpPost("register")]
@@ -59,7 +59,7 @@ namespace Sparta.Web.Controllers
             _userRepository.Add(user);
             _userRepository.Commit();
 
-            return _authService.GetAuthData(id, user.Role);
+            return _authService.GetAuthData(id, user.Role, user.Username);
         }
     }
 }

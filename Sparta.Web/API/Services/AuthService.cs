@@ -19,7 +19,7 @@ namespace Sparta.Web.API.Services
             this._jwtLifespan = jwtLifespan;
         }
 
-        public AuthData GetAuthData(string id, string role)
+        public AuthData GetAuthData(string id, string role, string username)
         {
             var expirationTime = DateTime.UtcNow.AddSeconds(_jwtLifespan);
 
@@ -32,7 +32,6 @@ namespace Sparta.Web.API.Services
 
                 }),
                 Expires = expirationTime,
-                // new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature)
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecret)),
                     SecurityAlgorithms.HmacSha256Signature
@@ -46,7 +45,8 @@ namespace Sparta.Web.API.Services
                 Token = token,
                 TokenExpirationTime = ((DateTimeOffset) expirationTime).ToUnixTimeSeconds(),
                 Role = role,
-                Id = id
+                Id = id,
+                Username = username
             };
         }
 
