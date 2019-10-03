@@ -1,4 +1,5 @@
-﻿using Sparta.Web.Model;
+﻿using Sparta.Web.Data.Abstract;
+using Sparta.Web.Model;
 
 namespace Sparta.Web.Data.Repositories
 {

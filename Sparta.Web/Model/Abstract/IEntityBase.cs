@@ -1,4 +1,4 @@
-﻿namespace Sparta.Web.Model
+﻿namespace Sparta.Web.Model.Abstract
 {
     public interface IEntityBase
     {

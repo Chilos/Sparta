@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Sparta.Web.Data.Abstract;
-using Sparta.Web.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Sparta.Web.Model.Abstract;
 
 namespace Sparta.Web.Data.Repositories
 {
@@ -14,7 +14,7 @@ namespace Sparta.Web.Data.Repositories
     {
         private readonly SpartaContext _context;
 
-        public EntityBaseRepository(SpartaContext context)
+        protected EntityBaseRepository(SpartaContext context)
         {
             _context = context;
         }

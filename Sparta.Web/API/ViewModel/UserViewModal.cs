@@ -1,14 +1,13 @@
-﻿using Sparta.Web.Model.Abstract;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace Sparta.Web.Model
+namespace Sparta.Web.API.ViewModel
 {
-    public class User : IEntityBase
+    public class UserViewModal
     {
-        public string Id { get; set; }
         public string Username { get; set; }
         public int PhoneNumber { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
-        public bool NeedChangePassword { get; set; }
     }
 }

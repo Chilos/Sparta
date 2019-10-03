@@ -1,7 +1,6 @@
-﻿using Sparta.Web.Data.Abstract;
-using Sparta.Web.Model;
+﻿using Sparta.Web.Model;
 
-namespace Sparta.Web.Data.Repositories
+namespace Sparta.Web.Data.Abstract
 {
     public interface IUserRepository : IEntityBaseRepository<User>
     {

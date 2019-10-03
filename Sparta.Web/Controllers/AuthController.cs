@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Sparta.Web.API.Services;
+using Sparta.Web.API.Services.Abstract;
 using Sparta.Web.API.ViewModel;
-using Sparta.Web.Data.Repositories;
+using Sparta.Web.Data.Abstract;
 using Sparta.Web.Model;
 
 namespace Sparta.Web.Controllers
@@ -32,8 +32,15 @@ namespace Sparta.Web.Controllers
             var passwordValid = _authService.VerifyPassword(model.Password, user.Password);
             if (!passwordValid)
                 return BadRequest(new {password = "invalid password"});
+            if (string.IsNullOrEmpty(model.NewPassword))
+            {
+                user.Password = model.NewPassword;
+                user.NeedChangePassword = false;
+                _userRepository.Update(user);
+                _userRepository.Commit();
+            }
 
-            return _authService.GetAuthData(user.Id, user.Role, user.Username);
+            return _authService.GetAuthData(user);
         }
 
         [HttpPost("register")]
@@ -53,13 +60,14 @@ namespace Sparta.Web.Controllers
                 Id = id,
                 Username = model.Username,
                 PhoneNumber = model.PhoneNumber,
-                Password = _authService.HashPassword(model.Password),
-                Role = model.Role
+                Password = _authService.HashPassword("password"),
+                Role = model.Role,
+                NeedChangePassword = true
             };
             _userRepository.Add(user);
             _userRepository.Commit();
 
-            return _authService.GetAuthData(id, user.Role, user.Username);
+            return _authService.GetAuthData(user);
         }
     }
 }

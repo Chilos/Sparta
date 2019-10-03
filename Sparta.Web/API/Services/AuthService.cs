@@ -4,7 +4,9 @@ using System.Security.Claims;
 using System.Text;
 using CryptoHelper;
 using Microsoft.IdentityModel.Tokens;
+using Sparta.Web.API.Services.Abstract;
 using Sparta.Web.API.ViewModel;
+using Sparta.Web.Model;
 
 namespace Sparta.Web.API.Services
 {
@@ -15,20 +17,29 @@ namespace Sparta.Web.API.Services
 
         public AuthService(string jwtSecret, int jwtLifespan)
         {
-            this._jwtSecret = jwtSecret;
-            this._jwtLifespan = jwtLifespan;
+            _jwtSecret = jwtSecret;
+            _jwtLifespan = jwtLifespan;
         }
 
-        public AuthData GetAuthData(string id, string role, string username)
+        public AuthData GetAuthData(User user)
         {
+            if (user.NeedChangePassword)
+            {
+                return new AuthData
+                {
+                    Role = user.Role,
+                    Id = user.Id,
+                    Username = user.Username
+                };
+            }
             var expirationTime = DateTime.UtcNow.AddSeconds(_jwtLifespan);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, id),
-                    new Claim(ClaimTypes.Role, role), 
+                    new Claim(ClaimTypes.Name, user.Id),
+                    new Claim(ClaimTypes.Role, user.Role), 
 
                 }),
                 Expires = expirationTime,
@@ -39,14 +50,14 @@ namespace Sparta.Web.API.Services
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
-
+            
             return new AuthData
             {
                 Token = token,
-                TokenExpirationTime = ((DateTimeOffset) expirationTime).ToUnixTimeSeconds(),
-                Role = role,
-                Id = id,
-                Username = username
+                TokenExpirationTime = ((DateTimeOffset)expirationTime).ToUnixTimeSeconds(),
+                Role = user.Role,
+                Id = user.Id,
+                Username = user.Username
             };
         }
 
