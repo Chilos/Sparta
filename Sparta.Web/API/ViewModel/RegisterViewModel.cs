@@ -8,7 +8,7 @@ namespace Sparta.Web.API.ViewModel
         [Required]
         [StringLength(60, MinimumLength = 2)]
         public string Username { get; set; }
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public string Role { get; set; }
     }
 }

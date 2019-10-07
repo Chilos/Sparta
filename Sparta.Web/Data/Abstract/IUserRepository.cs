@@ -4,7 +4,7 @@ namespace Sparta.Web.Data.Abstract
 {
     public interface IUserRepository : IEntityBaseRepository<User>
     {
-        bool IsPhoneNumberUniq(int phoneNumber);
+        bool IsPhoneNumberUniq(string phoneNumber);
         bool IsUsernameUniq(string username);
     }
 }

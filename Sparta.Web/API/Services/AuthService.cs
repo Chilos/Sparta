@@ -23,15 +23,6 @@ namespace Sparta.Web.API.Services
 
         public AuthData GetAuthData(User user)
         {
-            if (user.NeedChangePassword)
-            {
-                return new AuthData
-                {
-                    Role = user.Role,
-                    Id = user.Id,
-                    Username = user.Username
-                };
-            }
             var expirationTime = DateTime.UtcNow.AddSeconds(_jwtLifespan);
 
             var tokenDescriptor = new SecurityTokenDescriptor

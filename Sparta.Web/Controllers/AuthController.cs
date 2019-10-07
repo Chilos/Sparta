@@ -27,14 +27,18 @@ namespace Sparta.Web.Controllers
                 return BadRequest(ModelState);
             var user = _userRepository.GetSingle(u => u.Username == model.Username);
             if (user == null)
-                return BadRequest(new {username = "no user with this name"});
+                return BadRequest(new {username = "no user with this name", error_code = "USER_NOT_FOUND"});
 
             var passwordValid = _authService.VerifyPassword(model.Password, user.Password);
             if (!passwordValid)
-                return BadRequest(new {password = "invalid password"});
-            if (string.IsNullOrEmpty(model.NewPassword))
+                return BadRequest(new {password = "invalid password", error_code = "INVALID_PASSWORD" });
+
+            if (user.NeedChangePassword && string.IsNullOrEmpty(model.NewPassword))
+                return BadRequest(new {password = "change password", error_code = "CHANGE_PASSWORD"});
+
+            if (!string.IsNullOrEmpty(model.NewPassword))
             {
-                user.Password = model.NewPassword;
+                user.Password = _authService.HashPassword(model.NewPassword);
                 user.NeedChangePassword = false;
                 _userRepository.Update(user);
                 _userRepository.Commit();

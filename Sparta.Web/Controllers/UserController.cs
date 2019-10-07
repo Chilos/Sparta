@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sparta.Web.API.ViewModel;
 using Sparta.Web.Data.Abstract;
 using Sparta.Web.Model;
 
@@ -21,22 +22,24 @@ namespace Sparta.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUser(string id)
+        public ActionResult<UserInfo> GetUser(string id)
         {
-            return _userRepository.GetSingle(id);
+            var user = _userRepository.GetSingle(id);
+            return new UserInfo
+            {
+                Username = user.Username,
+                Id = user.Id,
+                PhoneNumber = user.PhoneNumber,
+                Role = user.Role
+            };
         }
 
         [HttpGet("users")]
-        public ActionResult<object> GetUsers()
+        public ActionResult<UserInfo[]> GetUsers()
         {
-            var claims = HttpContext?.User?.Claims.ToArray() ?? new Claim[1];
-            return new
-            {
-                current_user = claims[0].Value,
-                role = claims[1].Value,
-                users = _userRepository.GetAll().ToArray()
-
-            };
+            return _userRepository.GetAll().Select(u => new UserInfo
+                {Username = u.Username, Id = u.Id, PhoneNumber = u.PhoneNumber, Role = u.Role}).ToArray();
+            
         }
     }
 }

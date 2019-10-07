@@ -9,7 +9,7 @@ namespace Sparta.Web.Data.Repositories
     {
         public UserRepository(SpartaContext context) : base(context) { }
 
-        public bool IsPhoneNumberUniq(int phoneNumber)
+        public bool IsPhoneNumberUniq(string phoneNumber)
         {
             var user = this.GetSingle(u => u.PhoneNumber == phoneNumber);
             return user == null;
