@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sparta.Web.Data;
 
 namespace Sparta.Web.Migrations
 {
     [DbContext(typeof(SpartaContext))]
-    partial class SpartaContextModelSnapshot : ModelSnapshot
+    [Migration("20191009122709_AddWorkShift")]
+    partial class AddWorkShift
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

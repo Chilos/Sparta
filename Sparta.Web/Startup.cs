@@ -65,6 +65,7 @@ namespace Sparta.Web
                     );
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<WorkShiftRepository>();
 
             services.AddSingleton<IAuthService>(new AuthService(
                 Configuration.GetValue<string>("JWTSecretKey"),

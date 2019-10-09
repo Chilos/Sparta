@@ -27,7 +27,17 @@ namespace Sparta.Web.Data
                 .Property(user => user.Username)
                 .HasMaxLength(60)
                 .IsRequired();
-
+            modelBuilder.Entity<WorkShift>().ToTable("WorkShift");
+            modelBuilder.Entity<WorkShift>()
+                .Property(ws => ws.Name)
+                .HasMaxLength(60)
+                .IsRequired();
+            modelBuilder.Entity<WorkShift>()
+                .Property(ws => ws.BeginTime)
+                .IsRequired();
+            modelBuilder.Entity<WorkShift>()
+                .Property(ws => ws.EndTime)
+                .IsRequired();
         }
     }
 }
