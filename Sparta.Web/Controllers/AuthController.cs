@@ -47,31 +47,31 @@ namespace Sparta.Web.Controllers
             return _authService.GetAuthData(user);
         }
 
-        [HttpPost("register")]
-        public ActionResult<AuthData> Post([FromBody] RegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var phoneUniq = _userRepository.IsPhoneNumberUniq(model.PhoneNumber);
-            if (!phoneUniq)
-                return BadRequest(new {email = "user with this email already exists"});
-            var usernameUniq = _userRepository.IsUsernameUniq(model.Username);
-            if (!usernameUniq)
-                return BadRequest(new {username = "user with this name already exists"});
-            var id = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                Id = id,
-                Username = model.Username,
-                PhoneNumber = model.PhoneNumber,
-                Password = _authService.HashPassword("password"),
-                Role = model.Role,
-                NeedChangePassword = true
-            };
-            _userRepository.Add(user);
-            _userRepository.Commit();
+        //[HttpPost("register")]
+        //public ActionResult<AuthData> Post([FromBody] RegisterViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+        //    var phoneUniq = _userRepository.IsPhoneNumberUniq(model.PhoneNumber);
+        //    if (!phoneUniq)
+        //        return BadRequest(new {email = "user with this email already exists"});
+        //    var usernameUniq = _userRepository.IsUsernameUniq(model.Username);
+        //    if (!usernameUniq)
+        //        return BadRequest(new {username = "user with this name already exists"});
+        //    var id = Guid.NewGuid().ToString();
+        //    var user = new User
+        //    {
+        //        Id = id,
+        //        Username = model.Username,
+        //        PhoneNumber = model.PhoneNumber,
+        //        Password = _authService.HashPassword("password"),
+        //        Role = model.Role,
+        //        NeedChangePassword = true
+        //    };
+        //    _userRepository.Add(user);
+        //    _userRepository.Commit();
 
-            return _authService.GetAuthData(user);
-        }
+        //    return _authService.GetAuthData(user);
+        //}
     }
 }

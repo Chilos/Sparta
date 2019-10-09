@@ -29,13 +29,7 @@ namespace Sparta.Web.Controllers
         public ActionResult<UserInfo> GetUser(string id)
         {
             var user = _userRepository.GetSingle(id);
-            return new UserInfo
-            {
-                Username = user.Username,
-                Id = user.Id,
-                PhoneNumber = user.PhoneNumber,
-                Role = user.Role
-            };
+            return UserInfo.Factory(user.Id, user.Username, user.RealName, user.PhoneNumber, user.Role);
         }
         [Authorize(Roles = "admin")]
         [HttpGet("remove/{id}")]
@@ -44,13 +38,7 @@ namespace Sparta.Web.Controllers
             var user = _userRepository.GetSingle(id);
             _userRepository.Delete(user);
             _userRepository.Commit();
-            return new UserInfo
-            {
-                Username = user.Username,
-                Id = user.Id,
-                PhoneNumber = user.PhoneNumber,
-                Role = user.Role
-            };
+            return UserInfo.Factory(user.Id, user.Username, user.RealName, user.PhoneNumber, user.Role);
         }
 
         [Authorize(Roles = "admin")]
@@ -64,6 +52,7 @@ namespace Sparta.Web.Controllers
             var user = _userRepository.GetSingle(model.Id);
             user.Username = model.Username;
             user.PhoneNumber = model.PhoneNumber;
+            user.RealName = model.RealName;
             if (model.IsDropPassword)
                 user.Password = _authService.HashPassword("password");
             user.Role = model.Role;
@@ -72,13 +61,7 @@ namespace Sparta.Web.Controllers
             _userRepository.Update(user);
             _userRepository.Commit();
 
-            return new UserInfo
-            {
-                Username = user.Username,
-                Id = user.Id,
-                Role = user.Role,
-                PhoneNumber = user.PhoneNumber
-            };
+            return UserInfo.Factory(user.Id, user.Username, user.RealName, user.PhoneNumber, user.Role);
         }
 
         [Authorize(Roles = "admin")]
@@ -93,6 +76,7 @@ namespace Sparta.Web.Controllers
             {
                 Id = id,
                 Username = model.Username,
+                RealName = model.RealName,
                 PhoneNumber = model.PhoneNumber,
                 Password = _authService.HashPassword("password"),
                 Role = model.Role,
@@ -100,20 +84,13 @@ namespace Sparta.Web.Controllers
             };
             _userRepository.Add(user);
             _userRepository.Commit();
-            return new UserInfo
-            {
-                Username = user.Username,
-                Id = user.Id,
-                Role = user.Role,
-                PhoneNumber = user.PhoneNumber
-            };
+            return UserInfo.Factory(user.Id, user.Username, user.RealName, user.PhoneNumber, user.Role);
         }
 
         [HttpGet("users")]
         public ActionResult<UserInfo[]> GetUsers()
         {
-            return _userRepository.GetAll().Select(u => new UserInfo
-            { Username = u.Username, Id = u.Id, PhoneNumber = u.PhoneNumber, Role = u.Role }).ToArray();
+            return _userRepository.GetAll().Select(u => UserInfo.Factory(u.Id, u.Username, u.RealName, u.PhoneNumber, u.Role)).ToArray();
 
         }
     }
