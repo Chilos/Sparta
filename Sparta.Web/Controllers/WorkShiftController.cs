@@ -8,6 +8,7 @@ using Sparta.Web.API.ViewModel;
 using Sparta.Web.Data.Abstract;
 using Sparta.Web.Data.Repositories;
 using Sparta.Web.Model;
+using Sparta.Web.Model.Enums;
 
 namespace Sparta.Web.Controllers
 {
@@ -27,7 +28,7 @@ namespace Sparta.Web.Controllers
         public ActionResult<WorkShiftViewModal[]> GetWorkShifts()
         {
             var workShifts = _workShiftRepository.GetAll();
-            return workShifts.Select(w=> WorkShiftViewModal.Factory(w.Id,w.Name,w.BeginTime,w.EndTime,w.WorkDaysPeriod,w.Role)).ToArray();
+            return workShifts.Select(w=> WorkShiftViewModal.Factory(w.Id,w.Name,w.BeginTime.Ticks,w.EndTime.Ticks,(int)w.WorkDaysPeriod,w.Role)).ToArray();
         }
         [Authorize(Roles = "admin")]
         [HttpGet("remove/{id}")]
@@ -36,7 +37,7 @@ namespace Sparta.Web.Controllers
             var workShift = _workShiftRepository.GetSingle(id);
             _workShiftRepository.Delete(workShift);
             _workShiftRepository.Commit();
-            return WorkShiftViewModal.Factory(workShift.Id, workShift.Name, workShift.BeginTime, workShift.EndTime, workShift.WorkDaysPeriod, workShift.Role);
+            return WorkShiftViewModal.Factory(workShift.Id, workShift.Name, workShift.BeginTime.Ticks, workShift.EndTime.Ticks, (int)workShift.WorkDaysPeriod, workShift.Role);
         }
 
         [Authorize(Roles = "admin")]
@@ -46,14 +47,14 @@ namespace Sparta.Web.Controllers
             var workShift = _workShiftRepository.GetSingle(model.Id);
             workShift.Name = model.Name;
             workShift.Role = model.Role;
-            workShift.BeginTime = model.BeginTime;
-            workShift.EndTime = model.EndTime;
-            workShift.WorkDaysPeriod = model.WorkDaysPeriod;
+            workShift.BeginTime = new DateTime(model.BeginTime);
+            workShift.EndTime = new DateTime(model.EndTime);
+            workShift.WorkDaysPeriod = (WorkDaysPeriod)model.WorkDaysPeriod;
 
             _workShiftRepository.Update(workShift);
             _workShiftRepository.Commit();
 
-            return WorkShiftViewModal.Factory(workShift.Id, workShift.Name, workShift.BeginTime, workShift.EndTime, workShift.WorkDaysPeriod, workShift.Role);
+            return WorkShiftViewModal.Factory(workShift.Id, workShift.Name, workShift.BeginTime.Ticks, workShift.EndTime.Ticks, (int)workShift.WorkDaysPeriod, workShift.Role);
         }
 
         [Authorize(Roles = "admin")]
@@ -65,14 +66,14 @@ namespace Sparta.Web.Controllers
             {
                 Id = id,
                 Name = model.Name,
-                BeginTime = model.BeginTime,
-                EndTime = model.EndTime,
-                WorkDaysPeriod = model.WorkDaysPeriod,
+                BeginTime = new DateTime(model.BeginTime),
+                EndTime = new DateTime(model.EndTime),
+                WorkDaysPeriod = (WorkDaysPeriod)model.WorkDaysPeriod,
                 Role = model.Role
             };
             _workShiftRepository.Add(workShift);
             _workShiftRepository.Commit();
-            return WorkShiftViewModal.Factory(workShift.Id, workShift.Name, workShift.BeginTime, workShift.EndTime, workShift.WorkDaysPeriod, workShift.Role);
+            return WorkShiftViewModal.Factory(workShift.Id, workShift.Name, workShift.BeginTime.Ticks, workShift.EndTime.Ticks, (int)workShift.WorkDaysPeriod, workShift.Role);
         }
 
     }
